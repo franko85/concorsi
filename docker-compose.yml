@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: concorsi-app
+    ports:
+      - "8888:80"            # App web -> http://localhost:8888
+    volumes:
+      - ./src:/var/www/html:cached
+    environment:
+      PHP_IDE_CONFIG: serverName=concorsi-local
+      XDEBUG_MODE: debug,develop
+      XDEBUG_CLIENT_HOST: host.docker.internal
+      XDEBUG_CLIENT_PORT: 9003
+      APP_ENV: local
+      DB_HOST: db
+      DB_NAME: concorsi
+      DB_USER: user
+      DB_PASS: pwd
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: concorsi-db
+    ports:
+      - "3307:3306"          # MySQL -> localhost:3307 (NON 3306)
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: concorsi
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: concorsi-pma
+    ports:
+      - "9090:80"            # phpMyAdmin -> http://localhost:9090
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: pwd
+    depends_on:
+      - db
+
+volumes:
+  db_data:
