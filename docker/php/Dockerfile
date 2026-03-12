@@ -8,7 +8,10 @@ RUN apt-get update && apt-get install -y \
         libicu-dev libzip-dev zip git nano \
     && docker-php-ext-install pdo_mysql intl zip \
     && rm -rf /var/lib/apt/lists/*
-
+# Installa Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && php -r "unlink('composer-setup.php');"
 # Xdebug per debug locale
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
@@ -21,4 +24,4 @@ COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini /usr/local/etc/php/conf.d/custom-dev.ini
 
 # Imposta DocumentRoot e permessi
-WORKDIR /var/www/html
+WORKDIR /var/www/html/public
