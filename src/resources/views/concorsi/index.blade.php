@@ -5,10 +5,10 @@
     <h1>Ricerca Concorsi</h1>
     <form method="get" action="{{ route('home') }}">
         <div class="row mb-3">
-            <div class="col">
+            <div class="col-md-4">
                 <input type="text" name="q" class="form-control" placeholder="Titolo o ente" value="{{ $q }}">
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <select name="regione" class="form-control">
                     <option value="">Tutte le regioni</option>
                     @foreach($regioni as $r)
@@ -16,7 +16,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <select name="categoria" class="form-control">
                     <option value="">Tutte le categorie</option>
                     @foreach($categorie as $c)
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col">
+            <div class="col-md-8">
                 <label>Requisiti:</label>
                 <select name="requisiti[]" class="form-control" multiple>
                     @foreach($allReq as $req)
@@ -34,8 +34,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col">
-                <label>Match All:</label>
+            <div class="col-md-4 d-flex align-items-center">
+                <label class="me-2">Match All:</label>
                 <input type="checkbox" name="match_all" value="1" @if($matchAll) checked @endif>
             </div>
         </div>

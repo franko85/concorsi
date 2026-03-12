@@ -12,6 +12,11 @@ RUN apt-get update && apt-get install -y \
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
+
+# Installa Node.js e npm (versione LTS)
+RUN apt-get update && apt-get install -y curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 # Xdebug per debug locale
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
@@ -22,6 +27,10 @@ RUN docker-php-ext-install opcache
 # Config Apache vhost e PHP ini
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini /usr/local/etc/php/conf.d/custom-dev.ini
+
+# Compila asset frontend (npm install + npm run build)
+WORKDIR /var/www/html
+RUN npm install && npm run build
 
 # Imposta DocumentRoot e permessi
 WORKDIR /var/www/html/public

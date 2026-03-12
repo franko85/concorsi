@@ -1,6 +1,8 @@
--- =====================================================================
--- init.sql - Schema & seed per "concorsi" con requisiti (MySQL 8)
--- Esegue su DATABASE già selezionato via MYSQL_DATABASE (es. 'concorsi')
+
+-- Inserimento utente admin per Laravel
+INSERT INTO users (name, email, password, created_at, updated_at)
+VALUES ('Admin', 'admin@email.it', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa5FQO6FkgfH0hZ2Z1Q5Q8Q8F5e', NOW(), NOW())
+ON DUPLICATE KEY UPDATE name = VALUES(name), password = VALUES(password), updated_at = NOW();
 -- =====================================================================
 
 -- Impostazioni consigliate per sviluppo (facoltative)
